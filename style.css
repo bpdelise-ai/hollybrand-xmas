@@ -1,32 +1,240 @@
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
 body {
   margin: 0;
   background: black;
   color: white;
   font-family: 'Press Start 2P', cursive;
-  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 section {
   min-height: 100vh;
-  padding: 40px;
-  box-sizing: border-box;
-}
+  scroll-snap-align: start;
 
-.hero,
-.ending {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  padding: 40px;
+  box-sizing: border-box;
+
+  position: relative;
 }
+
+/* ===================================== */
+/* START SCREEN */
+/* ===================================== */
+
+#start-screen {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 9999;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-content {
+  text-align: center;
+}
+
+.main-title {
+  font-size: 4rem;
+  animation: pulse 2s infinite;
+}
+
+.subtitle {
+  margin-top: 30px;
+  opacity: 0.8;
+}
+
+#startButton {
+  margin-top: 50px;
+
+  background: white;
+  color: black;
+
+  border: none;
+
+  padding: 20px 40px;
+
+  font-family: inherit;
+  font-size: 1rem;
+
+  cursor: pointer;
+
+  transition: transform 0.3s;
+}
+
+#startButton:hover {
+  transform: scale(1.1);
+}
+
+.small-text {
+  margin-top: 30px;
+  opacity: 0.5;
+  font-size: 0.6rem;
+}
+
+/* ===================================== */
+/* HERO */
+/* ===================================== */
+
+.hero {
+  background:
+    radial-gradient(circle at center, #111 0%, black 70%);
+}
+
+.glow {
+  font-size: 4rem;
+
+  text-shadow:
+    0 0 10px white,
+    0 0 20px white,
+    0 0 40px white;
+}
+
+.hero-sub {
+  margin-top: 30px;
+  opacity: 0.7;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+
+  animation: bounce 2s infinite;
+}
+
+/* ===================================== */
+/* VIDEOS */
+/* ===================================== */
 
 .video-section iframe {
-  width: 100%;
+  width: 90%;
   height: 80vh;
+
+  border: 4px solid white;
+  border-radius: 20px;
+
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.3);
 }
 
+/* ===================================== */
+/* GAME */
+/* ===================================== */
+
 .game-frame {
-  width: 100%;
+  width: 95%;
   height: 85vh;
-  border: none;
+
+  border: 4px solid white;
+  border-radius: 20px;
+
+  background: black;
+}
+
+/* ===================================== */
+/* TRANSITIONS */
+/* ===================================== */
+
+.transition-section {
+  background:
+    linear-gradient(180deg, black, #111, black);
+}
+
+.world-card {
+  text-align: center;
+
+  animation: zoomIn 2s ease;
+}
+
+.world-card h1 {
+  font-size: 5rem;
+
+  text-shadow:
+    0 0 10px cyan,
+    0 0 30px cyan;
+}
+
+/* ===================================== */
+/* SECRET SECTION */
+/* ===================================== */
+
+.secret-section {
+  background:
+    radial-gradient(circle, #220022, black);
+}
+
+/* ===================================== */
+/* ENDING */
+/* ===================================== */
+
+.ending-card {
+  text-align: center;
+}
+
+.credits {
+  margin-top: 50px;
+  opacity: 0.5;
+  font-size: 0.6rem;
+}
+
+/* ===================================== */
+/* TITLES */
+/* ===================================== */
+
+.section-title {
+  margin-bottom: 30px;
+
+  opacity: 0.7;
+  letter-spacing: 3px;
+}
+
+/* ===================================== */
+/* ANIMATIONS */
+/* ===================================== */
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes bounce {
+  0%,100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

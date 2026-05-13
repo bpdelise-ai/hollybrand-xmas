@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hollybrand Xmas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>HOLLYBRAND 2.0</title>
 
   <link rel="stylesheet" href="style.css">
 
@@ -12,50 +14,205 @@
 
 <body>
 
-<section class="hero">
-  <h1>HOLLYBRAND 2.0</h1>
-  <p>Christmas 2026</p>
-</section>
+<!-- ===================================== -->
+<!-- AUDIO -->
+<!-- ===================================== -->
 
-<section class="video-section">
-  <iframe
-    src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-    title="Video"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
-</section>
+<audio id="introMusic" loop>
+  <source src="assets/audio/intro.mp3" type="audio/mp3">
+</audio>
 
-<section class="game-section">
-  <h2>Part 1</h2>
+<audio id="worldSound">
+  <source src="assets/audio/world-transition.mp3" type="audio/mp3">
+</audio>
 
-  <iframe
-    class="game-frame"
-    src="emulator/emulator.html">
-  </iframe>
-</section>
+<audio id="secretSound">
+  <source src="assets/audio/secret.wav" type="audio/wav">
+</audio>
 
-<section class="video-section">
-  <iframe
-    src="https://www.youtube.com/embed/YOUR_VIDEO_2"
-    title="Video"
-    frameborder="0"
-    allowfullscreen>
-  </iframe>
-</section>
+<!-- ===================================== -->
+<!-- START SCREEN -->
+<!-- ===================================== -->
 
-<section class="game-section">
-  <h2>Part 2</h2>
+<div id="start-screen">
+  <div class="start-content">
 
-  <iframe
-    class="game-frame"
-    src="emulator/emulator2.html">
-  </iframe>
-</section>
+    <h1 class="main-title">HOLLYBRAND 2.0</h1>
 
-<section class="ending">
-  <h1>Merry Christmas Stee ❤️</h1>
-</section>
+    <p class="subtitle">
+      A Christmas Adventure For Stee
+    </p>
+
+    <button id="startButton">
+      PRESS START
+    </button>
+
+    <p class="small-text">
+      Controller Recommended
+    </p>
+
+  </div>
+</div>
+
+<!-- ===================================== -->
+<!-- MAIN EXPERIENCE -->
+<!-- ===================================== -->
+
+<div id="experience">
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="stars"></div>
+
+    <h1 class="glow">HOLLYBRAND 2.0</h1>
+
+    <p class="hero-sub">
+      Christmas 2026
+    </p>
+
+    <div class="scroll-indicator">
+      ▼ SCROLL ▼
+    </div>
+
+  </section>
+
+  <!-- VIDEO 1 -->
+
+  <section class="video-section">
+
+    <div class="section-title">
+      MEMORY 01
+    </div>
+
+    <iframe
+      src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1&rel=0"
+      title="Video 1"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+
+  </section>
+
+  <!-- WORLD TRANSITION -->
+
+  <section class="transition-section trigger-world1">
+
+    <div class="world-card">
+      <h1>WORLD 1</h1>
+      <p>THE JOURNEY BEGINS</p>
+    </div>
+
+  </section>
+
+  <!-- GAME PART 1 -->
+
+  <section class="game-section">
+
+    <div class="section-title">
+      LEVEL 1
+    </div>
+
+    <iframe
+      class="game-frame"
+      src="emulator/emulator.html">
+    </iframe>
+
+  </section>
+
+  <!-- INTERMISSION -->
+
+  <section class="intermission">
+
+    <div class="message-box">
+      <p>
+        The adventure continues...
+      </p>
+    </div>
+
+  </section>
+
+  <!-- VIDEO 2 -->
+
+  <section class="video-section">
+
+    <div class="section-title">
+      MEMORY 02
+    </div>
+
+    <iframe
+      src="https://www.youtube.com/embed/YOUR_VIDEO_2?autoplay=1&mute=1&rel=0"
+      title="Video 2"
+      frameborder="0"
+      allow="autoplay; encrypted-media"
+      allowfullscreen>
+    </iframe>
+
+  </section>
+
+  <!-- WORLD 2 TRANSITION -->
+
+  <section class="transition-section trigger-world2">
+
+    <div class="world-card">
+      <h1>WORLD 2</h1>
+      <p>STEE LAND</p>
+    </div>
+
+  </section>
+
+  <!-- GAME PART 2 -->
+
+  <section class="game-section">
+
+    <div class="section-title">
+      FINAL QUEST
+    </div>
+
+    <iframe
+      class="game-frame"
+      src="emulator/emulator2.html">
+    </iframe>
+
+  </section>
+
+  <!-- SECRET SECTION -->
+
+  <section class="secret-section">
+
+    <h1>SECRET UNLOCKED</h1>
+
+    <p>
+      Thanks for being my player 2 ❤️
+    </p>
+
+  </section>
+
+  <!-- ENDING -->
+
+  <section class="ending">
+
+    <div class="ending-card">
+
+      <h1>Merry Christmas Stee ❤️</h1>
+
+      <p>
+        Thank you for every adventure.
+      </p>
+
+      <p class="credits">
+        Created by Brandon
+      </p>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
