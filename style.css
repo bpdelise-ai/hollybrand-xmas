@@ -1,7 +1,32 @@
 body {
-    background-color: #f0f0f0;
-    font-family: sans-serif;
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+  scroll-behavior: smooth;
 }
-h1 {
-    color: navy;
+
+section {
+  min-height: 100vh;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.hero,
+.ending {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-section iframe {
+  width: 100%;
+  height: 80vh;
+}
+
+.game-frame {
+  width: 100%;
+  height: 85vh;
+  border: none;
 }
