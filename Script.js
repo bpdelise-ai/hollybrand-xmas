@@ -131,21 +131,24 @@
     function checkCurrentSection() {
       var scrollTop = snapContainer.scrollTop;
       var vh = window.innerHeight;
-      // Which section index are we on?
       var index = Math.round(scrollTop / vh);
       var sections = snapContainer.querySelectorAll('.snap-section');
       var current = sections[index];
       if (!current) {
         snowVisible = true;
+        canvas.style.opacity = '1';
         return;
       }
       var isMedia = current.classList.contains('video-section') ||
                     current.classList.contains('game-section');
       snowVisible = !isMedia;
+      canvas.style.opacity = snowVisible ? '1' : '0';
     }
 
     snapContainer.addEventListener('scroll', checkCurrentSection, { passive: true });
-    // Run once on init so hero shows snow immediately
+    // Run immediately — hero is first non-media section so snow shows right away
+    snowVisible = true;
+    canvas.style.opacity = '1';
     checkCurrentSection();
   }
 
