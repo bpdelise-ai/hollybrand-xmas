@@ -3,56 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="description" content="HOLLYBRAND 2.0 – A Christmas Adventure For Stee">
   <title>HOLLYBRAND 2.0</title>
 
-  <link rel="stylesheet" href="style.css">
-
+  <!-- Preconnect for faster font load -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <!-- ===================================== -->
-<!-- AUDIO -->
+<!-- AUDIO                                -->
 <!-- ===================================== -->
 
-<audio id="introMusic" loop>
-  <source src="assets/audio/intro.mp3" type="audio/mp3">
+<audio id="introMusic" loop preload="none">
+  <source src="assets/audio/intro.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="worldSound">
-  <source src="assets/audio/world-transition.mp3" type="audio/mp3">
+<audio id="worldSound" preload="none">
+  <source src="assets/audio/world-transition.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="secretSound">
+<audio id="secretSound" preload="none">
   <source src="assets/audio/secret.wav" type="audio/wav">
 </audio>
 
 <!-- ===================================== -->
-<!-- START SCREEN -->
+<!-- START SCREEN                         -->
 <!-- ===================================== -->
 
-<div id="start-screen">
+<div id="start-screen" role="main" aria-label="Start screen">
 
   <div class="start-content">
 
-    <h1 class="main-title">
-      HOLLYBRAND 2.0
+    <h1 class="main-title" aria-label="Hollybrand 2.0">
+      HOLLYBRAND<br>2.0
     </h1>
 
     <p class="subtitle">
       A Christmas Adventure For Stee
     </p>
 
-    <button id="startButton">
-      PRESS START
+    <!-- Keyboard: Enter also triggers start -->
+    <button id="startButton" aria-label="Press start to begin the adventure">
+      ▶ PRESS START
     </button>
 
     <p class="small-text">
-      Controller Recommended
+      🎮 Controller Recommended
     </p>
 
   </div>
@@ -60,199 +62,271 @@
 </div>
 
 <!-- ===================================== -->
-<!-- MAIN EXPERIENCE -->
+<!-- MAIN EXPERIENCE                      -->
 <!-- ===================================== -->
 
-<div id="experience">
+<div id="experience" aria-hidden="true">
 
-  <!-- HERO -->
+  <!-- ── HERO ──────────────────────────── -->
 
-  <section class="hero">
+  <section class="hero" aria-label="Hero">
 
-    <h1 class="glow">
-      HOLLYBRAND 2.0
-    </h1>
+    <div class="hero-inner">
+      <div class="pixel-decoration" aria-hidden="true">★ ★ ★</div>
 
-    <p class="hero-sub">
-      Christmas 2026
-    </p>
+      <h1 class="glow">HOLLYBRAND 2.0</h1>
 
-    <div class="scroll-indicator">
-      ▼ SCROLL ▼
+      <p class="hero-sub">Christmas 2026</p>
+
+      <div class="hero-meta" aria-hidden="true">
+        <span>INSERT COIN</span>
+        <span class="blink">●</span>
+      </div>
     </div>
+
+    <div class="scroll-indicator" aria-hidden="true">▼ SCROLL ▼</div>
 
   </section>
 
-  <!-- VIDEO 1 -->
+  <!-- ── MEMORY 01 ──────────────────────── -->
 
-  <section class="video-section">
+  <section class="video-section" aria-label="Memory 01">
 
-    <div class="section-title">
+    <div class="section-label" aria-hidden="true">
+      <span class="label-bracket">[</span>
       MEMORY 01
+      <span class="label-bracket">]</span>
     </div>
 
-    <iframe
-      src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1&rel=0"
-      title="Video 1"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
-    </iframe>
+    <!--
+      IMPORTANT – Replace YOUR_VIDEO_ID with the real YouTube video ID.
+      The autoplay=1 param only works if the user has already interacted
+      with the page (which they have, via the start button). mute=1 is
+      required by browsers for autoplay to succeed.
+      Remove mute=1 only if you do NOT want autoplay.
+    -->
+    <div class="video-wrapper" role="region" aria-label="Memory 01 video">
+      <iframe
+        src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
+        title="Memory 01"
+        frameborder="0"
+        loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
 
   </section>
 
-  <!-- WORLD 1 -->
+  <!-- ── WORLD 1 TRANSITION ─────────────── -->
 
-  <section class="transition-section trigger-world1">
+  <section class="transition-section trigger-world1" aria-label="World 1">
 
     <div class="world-card">
-
-      <h1>WORLD 1</h1>
-
-      <p>THE JOURNEY BEGINS</p>
-
+      <div class="world-number">WORLD 1</div>
+      <div class="world-name">THE JOURNEY BEGINS</div>
+      <div class="world-stars" aria-hidden="true">☆ ☆ ☆</div>
     </div>
 
   </section>
 
-  <!-- GAME 1 -->
+  <!-- ── LEVEL 1 ────────────────────────── -->
 
-  <section class="game-section">
+  <section class="game-section" aria-label="Level 1">
 
-    <div class="section-title">
+    <div class="section-label" aria-hidden="true">
+      <span class="label-bracket">[</span>
       LEVEL 1
+      <span class="label-bracket">]</span>
     </div>
 
-    <iframe
-      class="game-frame"
-      src="emulator/emulator.html">
-    </iframe>
+    <!--
+      ROM / EMULATOR FIX:
+      ─────────────────────────────────────────────────────────────────────
+      Iframes require the page to be served via a local HTTP server, NOT
+      opened as a file:// URL. If you're double-clicking index.html,
+      browsers will block the emulator iframes with a security error.
+
+      HOW TO RUN LOCALLY (pick one):
+        • VS Code → install "Live Server" extension → right-click index.html → Open with Live Server
+        • Node.js  → run:  npx serve .   (then visit http://localhost:3000)
+        • Python   → run:  python -m http.server   (then visit http://localhost:8000)
+
+      The sandbox attributes below grant the minimum permissions the
+      emulator needs. Add more allow-* tokens only if the emulator needs them.
+      ─────────────────────────────────────────────────────────────────────
+    -->
+    <div class="game-wrapper" role="region" aria-label="Level 1 game">
+      <iframe
+        class="game-frame"
+        src="emulator/emulator.html"
+        title="Level 1 – Game Emulator"
+        frameborder="0"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
+        allow="gamepad; autoplay"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p class="game-hint" aria-live="polite">
+      ⚠️ Game not loading? Make sure you're running a local server — see the comment in the HTML.
+    </p>
 
   </section>
 
-  <!-- INTERMISSION -->
+  <!-- ── INTERMISSION ───────────────────── -->
 
-  <section class="intermission">
+  <section class="intermission" aria-label="Intermission">
 
     <div class="message-box">
-
-      <p>
-        The adventure continues...
-      </p>
-
+      <div class="message-icon" aria-hidden="true">💾</div>
+      <p>The adventure continues…</p>
+      <div class="message-icon" aria-hidden="true">▶</div>
     </div>
 
   </section>
 
-  <!-- VIDEO 2 -->
+  <!-- ── MEMORY 02 ──────────────────────── -->
 
-  <section class="video-section">
+  <section class="video-section" aria-label="Memory 02">
 
-    <div class="section-title">
+    <div class="section-label" aria-hidden="true">
+      <span class="label-bracket">[</span>
       MEMORY 02
+      <span class="label-bracket">]</span>
     </div>
 
-    <iframe
-      src="https://www.youtube.com/embed/YOUR_VIDEO_2?autoplay=1&mute=1&rel=0"
-      title="Video 2"
-      frameborder="0"
-      allow="autoplay; encrypted-media"
-      allowfullscreen>
-    </iframe>
+    <div class="video-wrapper" role="region" aria-label="Memory 02 video">
+      <iframe
+        src="https://www.youtube.com/embed/YOUR_VIDEO_2?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
+        title="Memory 02"
+        frameborder="0"
+        loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
 
   </section>
 
-  <!-- WORLD 2 -->
+  <!-- ── WORLD 2 TRANSITION ─────────────── -->
 
-  <section class="transition-section trigger-world2">
+  <section class="transition-section trigger-world2" aria-label="World 2">
 
     <div class="world-card">
-
-      <h1>WORLD 2</h1>
-
-      <p>STEE LAND</p>
-
+      <div class="world-number">WORLD 2</div>
+      <div class="world-name">STEE LAND</div>
+      <div class="world-stars" aria-hidden="true">☆ ☆ ☆</div>
     </div>
 
   </section>
 
-  <!-- GAME 2 -->
+  <!-- ── FINAL QUEST ────────────────────── -->
 
-  <section class="game-section">
+  <section class="game-section" aria-label="Final Quest">
 
-    <div class="section-title">
+    <div class="section-label" aria-hidden="true">
+      <span class="label-bracket">[</span>
       FINAL QUEST
+      <span class="label-bracket">]</span>
     </div>
 
-    <iframe
-      class="game-frame"
-      src="emulator/emulator2.html">
-    </iframe>
+    <div class="game-wrapper" role="region" aria-label="Final Quest game">
+      <iframe
+        class="game-frame"
+        src="emulator/emulator2.html"
+        title="Final Quest – Game Emulator"
+        frameborder="0"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
+        allow="gamepad; autoplay"
+        allowfullscreen>
+      </iframe>
+    </div>
 
-  </section>
-
-  <!-- SECRET SECTION -->
-
-  <section class="secret-section">
-
-    <h1>SECRET UNLOCKED</h1>
-
-    <p>
-      Thanks for being my player 2 ❤️
+    <p class="game-hint" aria-live="polite">
+      ⚠️ Game not loading? Make sure you're running a local server — see the comment in the HTML.
     </p>
 
   </section>
 
-  <!-- WORLD 3 -->
+  <!-- ── SECRET ─────────────────────────── -->
 
-  <section class="transition-section trigger-world3">
+  <section class="secret-section" aria-label="Secret unlocked">
+
+    <div class="secret-inner">
+      <div class="secret-badge" aria-hidden="true">★ SECRET UNLOCKED ★</div>
+      <h2>Thanks for being my Player 2 ❤️</h2>
+    </div>
+
+  </section>
+
+  <!-- ── WORLD 3 TRANSITION ─────────────── -->
+
+  <section class="transition-section trigger-world3" aria-label="World 3">
 
     <div class="world-card">
-
-      <h1>WORLD 3</h1>
-
-      <p>FINAL DESTINATION</p>
-
+      <div class="world-number">WORLD 3</div>
+      <div class="world-name">FINAL DESTINATION</div>
+      <div class="world-stars" aria-hidden="true">☆ ☆ ☆</div>
     </div>
 
   </section>
 
-  <!-- GAME 3 -->
+  <!-- ── FINAL WORLD ────────────────────── -->
 
-  <section class="game-section">
+  <section class="game-section" aria-label="Final World">
 
-    <div class="section-title">
+    <div class="section-label" aria-hidden="true">
+      <span class="label-bracket">[</span>
       FINAL WORLD
+      <span class="label-bracket">]</span>
     </div>
 
-    <iframe
-      class="game-frame"
-      src="emulator/emulator3.html">
-    </iframe>
+    <div class="game-wrapper" role="region" aria-label="Final World game">
+      <iframe
+        class="game-frame"
+        src="emulator/emulator3.html"
+        title="Final World – Game Emulator"
+        frameborder="0"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
+        allow="gamepad; autoplay"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <p class="game-hint" aria-live="polite">
+      ⚠️ Game not loading? Make sure you're running a local server — see the comment in the HTML.
+    </p>
 
   </section>
 
-  <!-- ENDING -->
+  <!-- ── ENDING ─────────────────────────── -->
 
-  <section class="ending">
+  <section class="ending" aria-label="Ending">
 
     <div class="ending-card">
 
-      <h1>Merry Christmas Stee ❤️</h1>
+      <div class="ending-stars" aria-hidden="true">★ ★ ★ ★ ★</div>
 
-      <p>
+      <h1>Merry Christmas, Stee ❤️</h1>
+
+      <p class="ending-message">
         Thank you for every adventure.
       </p>
 
-      <p class="credits">
-        Created by Brandon
-      </p>
+      <div class="credits-block">
+        <p class="credits">CREATED BY BRANDON</p>
+        <p class="credits-year">© 2026</p>
+      </div>
 
     </div>
 
   </section>
 
-</div>
+</div><!-- /#experience -->
 
 <script src="script.js"></script>
 
