@@ -78,6 +78,10 @@
   }
 
   // ── SNOW ──
+  // Snow only renders when NOT on a video or game section.
+  // This prevents snowflakes from appearing over iframes.
+  var snowActive = true;
+
   function initSnow() {
     var canvas = document.getElementById('snow');
     if (!canvas) return;
@@ -104,20 +108,37 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      flakes.forEach(function (f) {
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,' + f.opacity + ')';
-        ctx.fill();
-        f.y += f.speed;
-        f.x += f.drift;
-        if (f.y > canvas.height) { f.y = -4; f.x = Math.random() * canvas.width; }
-        if (f.x > canvas.width)  f.x = 0;
-        if (f.x < 0)             f.x = canvas.width;
-      });
+      if (snowActive) {
+        flakes.forEach(function (f) {
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,' + f.opacity + ')';
+          ctx.fill();
+          f.y += f.speed;
+          f.x += f.drift;
+          if (f.y > canvas.height) { f.y = -4; f.x = Math.random() * canvas.width; }
+          if (f.x > canvas.width)  f.x = 0;
+          if (f.x < 0)             f.x = canvas.width;
+        });
+      }
       requestAnimationFrame(draw);
     }
     draw();
+
+    // Watch which section is visible and pause snow on video/game sections
+    var sections = document.querySelectorAll('.snap-section');
+    var sectionObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var isMediaSection = el.classList.contains('video-section') || el.classList.contains('game-section');
+        snowActive = !isMediaSection;
+        // Also hide/show the canvas itself for extra safety
+        canvas.style.opacity = snowActive ? '1' : '0';
+      });
+    }, { threshold: 0.6 });
+
+    sections.forEach(function (s) { sectionObserver.observe(s); });
   }
 
   // ── GAME FRAME LAZY LOAD / UNLOAD ──

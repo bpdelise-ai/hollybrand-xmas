@@ -49,7 +49,7 @@ body {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1; /* behind iframes and content */
+  z-index: 0;
 }
 
 /* ── SCANLINES ── */
@@ -63,7 +63,7 @@ body::after {
     rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px
   );
   pointer-events: none;
-  z-index: 2; /* behind iframes, above background */
+  z-index: 0;
 }
 
 /* ── ANIMATIONS ── */
@@ -169,6 +169,7 @@ body::after {
   position: relative;
   overflow: hidden;
   padding: 2rem;
+  isolation: isolate; /* own stacking context, above snow canvas */
 }
 
 /* ═══════════════════════════════════════
@@ -398,12 +399,13 @@ body::after {
   width: 100%;
   max-width: 860px;
   padding-bottom: min(56.25%, 52vh);
-  background: var(--panel);
+  background: #000;
   border: 3px solid var(--border);
   box-shadow:
     4px 0 0 var(--border), -4px 0 0 var(--border),
     0 4px 0 var(--border), 0 -4px 0 var(--border);
   flex-shrink: 0;
+  z-index: 1;
 }
 .video-wrapper iframe {
   position: absolute;
@@ -429,6 +431,7 @@ body::after {
     0 4px 0 var(--border), 0 -4px 0 var(--border),
     0 0 50px rgba(0,229,255,.06);
   flex-shrink: 0;
+  z-index: 1;
 }
 .game-wrapper::before {
   content: '';
@@ -622,6 +625,26 @@ body::after {
 .credits-block { border-top: 1px solid var(--border); padding-top: 1.2rem; }
 .credits      { font-size: .42rem; color: var(--muted); letter-spacing: .2em; margin-bottom: .3rem; }
 .credits-year { font-size: .38rem; color: var(--border); letter-spacing: .1em; }
+
+
+/* ── IFRAME SNOW SHIELD ── */
+/* Solid background on video/game sections so snow canvas
+   (z-index:0, fixed) is completely hidden behind them */
+.video-section,
+.game-section {
+  background: var(--black);
+  z-index: 1;
+  isolation: isolate;
+}
+.video-section::before,
+.game-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--black);
+  z-index: 0;
+  pointer-events: none;
+}
 
 /* ═══════════════════════════════════════
    RESPONSIVE
