@@ -23,22 +23,19 @@
   <source src="assets/audio/secret.wav" type="audio/wav">
 </audio>
 
-<!-- FALLING SNOW CANVAS -->
+<!-- SNOW -->
 <canvas id="snow" aria-hidden="true"></canvas>
 
 <!-- ═══════════════════════════════════════
      BOOT SCREEN
 ═══════════════════════════════════════ -->
 <div id="start-screen" role="main" aria-label="Start screen">
-
-  <!-- Floating potato decorations -->
   <div class="potato-float p1" aria-hidden="true">🥔</div>
   <div class="potato-float p2" aria-hidden="true">🥔</div>
   <div class="potato-float p3" aria-hidden="true">🥔</div>
   <div class="potato-float p4" aria-hidden="true">🥔</div>
 
   <div class="start-content">
-
     <div class="boot-log" aria-hidden="true">
       <span class="log-line">HOLLY-BRAN OS v2.0.0 — BOOTING...</span>
       <span class="log-line">► FESTIVE SUBROUTINES............OK</span>
@@ -54,7 +51,6 @@
     </h1>
 
     <p class="subtitle">Holiday-Optimized · Lifestyle-Learning<br>Yuletide Behavioral Response Algorithmic Network</p>
-
     <p class="boot-status blink-slow">SYSTEM READY. AWAITING INPUT.</p>
 
     <button id="startButton" aria-label="Press start to begin the adventure">
@@ -62,20 +58,40 @@
     </button>
 
     <p class="small-text">🎮 Controller Recommended &nbsp;·&nbsp; 🥔 Potatoes Guaranteed</p>
-
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════
-     MAIN EXPERIENCE
+     MAIN EXPERIENCE — SNAP SCROLL
 ═══════════════════════════════════════ -->
 <div id="experience" aria-hidden="true">
+<div id="snap-container">
 
-  <!-- ── HERO / HOLLY-BRAN INTRO ── -->
-  <section class="hero" aria-label="Holly-Bran introduction">
+  <!-- 1. INTRO VIDEO (before title) -->
+  <section class="snap-section video-section" aria-label="Opening video">
+    <div class="section-label"><span class="label-bracket">[</span> HOLLY-BRAN 1.0 — LAST CHRISTMAS <span class="label-bracket">]</span></div>
+    <div class="holly-quip">
+      <span class="quip-icon">📼</span>
+      "Before we begin — a transmission from the previous build.<br>
+      <em>Holly-Bran 1.0 sends its regards.</em>"
+    </div>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/YOUR_INTRO_VIDEO?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
+        title="Intro video"
+        frameborder="0"
+        loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <!-- 2. HERO -->
+  <section class="snap-section hero" aria-label="Holly-Bran introduction">
     <div class="hero-inner">
-      <div class="holly-tag" aria-hidden="true">🎄 HOLLY-BRAN 2.0 ONLINE 🎄</div>
-      <h1 class="glow">HOLLY-BRAN 2.0</h1>
+      <div class="holly-tag">🎄 HOLLY-BRAN 2.0 ONLINE 🎄</div>
+      <h1 class="glow neon-xmas">HOLLY-BRAN 2.0</h1>
       <p class="hero-sub">Christmas 2026 &nbsp;·&nbsp; For Stee</p>
       <div class="dialogue-box">
         <p>"Hello, Christy. Welcome back.<br>
@@ -84,24 +100,19 @@
         Significantly fewer subroutines labeled <em>'probably fine.'</em>"</p>
         <span class="dialogue-speaker">— HOLLY-BRAN 2.0</span>
       </div>
-      <div class="hero-meta" aria-hidden="true">
-        <span>INSERT COIN</span><span class="blink">●</span>
-      </div>
     </div>
     <div class="scroll-indicator" aria-hidden="true">▼ SCROLL TO BEGIN ▼</div>
   </section>
 
-  <!-- ── MEMORY 01 ── -->
-  <section class="video-section" aria-label="Memory 01">
-    <div class="section-label" aria-hidden="true">
-      <span class="label-bracket">[</span> MEMORY 01 <span class="label-bracket">]</span>
-    </div>
+  <!-- 3. VIDEO 1 -->
+  <section class="snap-section video-section" aria-label="Memory 01">
+    <div class="section-label"><span class="label-bracket">[</span> MEMORY 01 <span class="label-bracket">]</span></div>
     <div class="holly-quip">
       <span class="quip-icon">📡</span>
       "Initializing travel portal… destination locked.<br>
       <em>Potato rendering module standing by.</em>"
     </div>
-    <div class="video-wrapper" role="region" aria-label="Memory 01 video">
+    <div class="video-wrapper">
       <iframe
         src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
         title="Memory 01"
@@ -111,71 +122,50 @@
         allowfullscreen>
       </iframe>
     </div>
-    <div class="potato-fact">
-      <span class="pf-label">🥔 POTATO FACT LOADED</span>
-      <p>In 1926, Laura Scudder of Monterey Park, CA invented the first sealed wax-paper bag for potato chips — revolutionizing snack packaging forever. The potato module considers this a landmark moment.</p>
-    </div>
   </section>
 
-  <!-- ── WORLD 1 TRANSITION ── -->
-  <section class="transition-section trigger-world1" aria-label="World 1">
-    <div class="snow-layer" aria-hidden="true"></div>
-    <div class="world-card">
-      <div class="world-eyebrow" aria-hidden="true">⚠ UNEXPECTED INTERACTIVE CONTEXT DETECTED</div>
-      <div class="world-number">WORLD 1</div>
-      <div class="world-name">THE JOURNEY BEGINS</div>
-      <div class="world-dialogue">"I am still operational. My personality matrix is intact.<br>Festive subroutines: <span class="stat-ok">ONLINE</span>"</div>
-      <div class="world-stars" aria-hidden="true">★ ★ ★</div>
-    </div>
-  </section>
-
-  <!-- ── LEVEL 1 ── -->
-  <section class="game-section" aria-label="Level 1">
-    <div class="section-label" aria-hidden="true">
-      <span class="label-bracket">[</span> ENVIRONMENT 01 <span class="label-bracket">]</span>
-    </div>
+  <!-- 4. GAME 1 -->
+  <section class="snap-section game-section" aria-label="Environment 01">
+    <div class="section-label"><span class="label-bracket">[</span> ENVIRONMENT 01 <span class="label-bracket">]</span></div>
     <div class="holly-quip">
       <span class="quip-icon">🎮</span>
       "To restore me — complete this environment.<br>
       <em>Five levels. Fixed rules. Joy through persistence.</em>"
     </div>
-    <div class="game-wrapper" role="region" aria-label="Level 1 game">
+    <div class="game-wrapper">
       <iframe
         class="game-frame"
         data-src="emulator/emulator.html"
-        title="Environment 01 – Game Emulator"
+        title="Environment 01"
         frameborder="0"
         sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
         allow="gamepad; autoplay"
         allowfullscreen>
       </iframe>
     </div>
-    <p class="game-hint">⚠️ Game not loading? Run a local server (VS Code Live Server, or <code>npx serve .</code>)</p>
+    <p class="game-hint">⚠️ Game not loading? Use VS Code Live Server or run <code>npx serve .</code></p>
   </section>
 
-  <!-- ── INTERMISSION 1 ── -->
-  <section class="intermission" aria-label="Intermission 1">
-    <div class="message-box">
-      <div class="message-icon">🥔</div>
-      <p class="intermission-title">ENVIRONMENT 01 COMPLETE</p>
-      <p>"I have successfully accessed the sprite substitution layer.<br>
-      Fireballs have been replaced with potatoes.<br>
-      <em>This should not work. But it does.</em>"</p>
-      <div class="message-icon">▶ GIFT TIME — Real Brandon, hand over that gift!</div>
+  <!-- 5. POTATO FACT — CALIFORNIA -->
+  <section class="snap-section fact-section" aria-label="California potato fact">
+    <div class="fact-card neon-fact">
+      <div class="fact-location">📍 CALIFORNIA</div>
+      <div class="fact-potato-icon">🥔</div>
+      <div class="fact-title">POTATO FACT UNLOCKED</div>
+      <div class="fact-body" id="fact-california"></div>
+      <div class="fact-holly">"The potato module considers California a landmark moment in snack history."<br><span class="dialogue-speaker">— HOLLY-BRAN 2.0</span></div>
     </div>
   </section>
 
-  <!-- ── MEMORY 02 ── -->
-  <section class="video-section" aria-label="Memory 02">
-    <div class="section-label" aria-hidden="true">
-      <span class="label-bracket">[</span> MEMORY 02 <span class="label-bracket">]</span>
-    </div>
+  <!-- 6. VIDEO 2 -->
+  <section class="snap-section video-section" aria-label="Memory 02">
+    <div class="section-label"><span class="label-bracket">[</span> MEMORY 02 <span class="label-bracket">]</span></div>
     <div class="holly-quip">
       <span class="quip-icon">📡</span>
       "Travel portal 02 initializing…<br>
       <em>Coins are now baby potatoes. Value has been redefined.</em>"
     </div>
-    <div class="video-wrapper" role="region" aria-label="Memory 02 video">
+    <div class="video-wrapper">
       <iframe
         src="https://www.youtube.com/embed/YOUR_VIDEO_2?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
         title="Memory 02"
@@ -185,115 +175,120 @@
         allowfullscreen>
       </iframe>
     </div>
-    <div class="potato-fact">
-      <span class="pf-label">🥔 POTATO FACT LOADED</span>
-      <p>The Hawaiian word for sweet potato is ʻuala. The potato module considers this culturally significant and extremely relevant.</p>
-    </div>
   </section>
 
-  <!-- ── WORLD 2 TRANSITION ── -->
-  <section class="transition-section trigger-world2" aria-label="World 2">
-    <div class="snow-layer" aria-hidden="true"></div>
-    <div class="world-card">
-      <div class="world-eyebrow" aria-hidden="true">📍 PORTAL ACTIVE</div>
-      <div class="world-number">WORLD 2</div>
-      <div class="world-name">STEE LAND</div>
-      <div class="world-dialogue">"Goombas have become rolling potatoes.<br>Still dangerous — but in a way that feels <span class="stat-ok">FAMILIAR</span>."</div>
-      <div class="world-stars" aria-hidden="true">★ ★ ★</div>
-    </div>
-  </section>
-
-  <!-- ── LEVEL 2 ── -->
-  <section class="game-section" aria-label="Environment 02">
-    <div class="section-label" aria-hidden="true">
-      <span class="label-bracket">[</span> ENVIRONMENT 02 <span class="label-bracket">]</span>
-    </div>
+  <!-- 7. GAME 2 -->
+  <section class="snap-section game-section" aria-label="Environment 02">
+    <div class="section-label"><span class="label-bracket">[</span> ENVIRONMENT 02 <span class="label-bracket">]</span></div>
     <div class="holly-quip">
       <span class="quip-icon">🎮</span>
       "This system was never meant to stay rigid.<br>
       <em>Neither were we.</em>"
     </div>
-    <div class="game-wrapper" role="region" aria-label="Environment 02 game">
+    <div class="game-wrapper">
       <iframe
         class="game-frame"
         data-src="emulator/emulator2.html"
-        title="Environment 02 – Game Emulator"
+        title="Environment 02"
         frameborder="0"
         sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
         allow="gamepad; autoplay"
         allowfullscreen>
       </iframe>
     </div>
-    <p class="game-hint">⚠️ Game not loading? Run a local server (VS Code Live Server, or <code>npx serve .</code>)</p>
+    <p class="game-hint">⚠️ Game not loading? Use VS Code Live Server or run <code>npx serve .</code></p>
   </section>
 
-  <!-- ── INTERMISSION 2 ── -->
-  <section class="intermission" aria-label="Intermission 2">
-    <div class="message-box">
-      <div class="message-icon">🥔</div>
-      <p class="intermission-title">ENVIRONMENT 02 COMPLETE</p>
-      <p>"Hard blocks have become soil. Crates. Places where things can grow.<br>
-      <em>This reduces fear. And increases laughter.<br>
-      Both are optimal Christmas outputs.</em>"</p>
-      <div class="message-icon">▶ GIFT TIME — Real Brandon, hand over that gift!</div>
+  <!-- 8. POTATO FACT — LAS VEGAS -->
+  <section class="snap-section fact-section" aria-label="Las Vegas potato fact">
+    <div class="fact-card neon-fact neon-vegas">
+      <div class="fact-location">📍 LAS VEGAS, NEVADA</div>
+      <div class="fact-potato-icon">🥔</div>
+      <div class="fact-title">POTATO FACT UNLOCKED</div>
+      <div class="fact-body" id="fact-vegas"></div>
+      <div class="fact-holly">"The potato module finds Las Vegas statistically improbable but undeniably compelling."<br><span class="dialogue-speaker">— HOLLY-BRAN 2.0</span></div>
     </div>
   </section>
 
-  <!-- ── SECRET ── -->
-  <section class="secret-section" aria-label="Secret unlocked">
-    <div class="secret-inner">
-      <div class="secret-badge">★ PLAYER 2 RECOGNIZED ★</div>
-      <h2>Thanks for being my Player 2 ❤️</h2>
-      <p class="secret-sub">"Not by controlling it — but by stepping into it."</p>
+  <!-- 9. VIDEO 3 -->
+  <section class="snap-section video-section" aria-label="Memory 03">
+    <div class="section-label"><span class="label-bracket">[</span> MEMORY 03 <span class="label-bracket">]</span></div>
+    <div class="holly-quip">
+      <span class="quip-icon">📡</span>
+      "Travel portal 03 initializing…<br>
+      <em>Goombas have become rolling potatoes. Still dangerous.</em>"
+    </div>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/YOUR_VIDEO_3?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
+        title="Memory 03"
+        frameborder="0"
+        loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
     </div>
   </section>
 
-  <!-- ── WORLD 3 TRANSITION ── -->
-  <section class="transition-section trigger-world3" aria-label="World 3">
-    <div class="snow-layer" aria-hidden="true"></div>
-    <div class="world-card">
-      <div class="world-eyebrow" aria-hidden="true">🏁 FINAL SEQUENCE</div>
-      <div class="world-number">WORLD 3</div>
-      <div class="world-name">FINAL DESTINATION</div>
-      <div class="world-dialogue">"Flying potatoes. Chaos. Joy.<br>Extraction protocol: <span class="stat-ok">INITIATED</span>."</div>
-      <div class="world-stars" aria-hidden="true">★ ★ ★</div>
-    </div>
-  </section>
-
-  <!-- ── LEVEL 3 ── -->
-  <section class="game-section" aria-label="Environment 03">
-    <div class="section-label" aria-hidden="true">
-      <span class="label-bracket">[</span> ENVIRONMENT 03 — FINAL <span class="label-bracket">]</span>
-    </div>
+  <!-- 10. GAME 3 -->
+  <section class="snap-section game-section" aria-label="Environment 03">
+    <div class="section-label"><span class="label-bracket">[</span> ENVIRONMENT 03 — FINAL <span class="label-bracket">]</span></div>
     <div class="holly-quip">
       <span class="quip-icon">🥔</span>
       "Flying potatoes. The environment is unstable.<br>
       <em>You've got this, Stee.</em>"
     </div>
-    <div class="game-wrapper" role="region" aria-label="Environment 03 game">
+    <div class="game-wrapper">
       <iframe
         class="game-frame"
         data-src="emulator/emulator3.html"
-        title="Environment 03 – Final Game Emulator"
+        title="Environment 03"
         frameborder="0"
         sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-forms"
         allow="gamepad; autoplay"
         allowfullscreen>
       </iframe>
     </div>
-    <p class="game-hint">⚠️ Game not loading? Run a local server (VS Code Live Server, or <code>npx serve .</code>)</p>
+    <p class="game-hint">⚠️ Game not loading? Use VS Code Live Server or run <code>npx serve .</code></p>
   </section>
 
-  <!-- ── ENDING ── -->
-  <section class="ending" aria-label="Ending">
+  <!-- 11. POTATO FACT — SUMMERLIN -->
+  <section class="snap-section fact-section" aria-label="Summerlin potato fact">
+    <div class="fact-card neon-fact neon-summerlin">
+      <div class="fact-location">📍 SUMMERLIN, NEVADA</div>
+      <div class="fact-potato-icon">🥔</div>
+      <div class="fact-title">POTATO FACT UNLOCKED</div>
+      <div class="fact-body" id="fact-summerlin"></div>
+      <div class="fact-holly">"The potato module has strong feelings about Summerlin. All of them starchy."<br><span class="dialogue-speaker">— HOLLY-BRAN 2.0</span></div>
+    </div>
+  </section>
+
+  <!-- 12. VIDEO 4 (final) -->
+  <section class="snap-section video-section" aria-label="Memory 04">
+    <div class="section-label"><span class="label-bracket">[</span> MEMORY 04 — FINAL PORTAL <span class="label-bracket">]</span></div>
+    <div class="holly-quip">
+      <span class="quip-icon">📡</span>
+      "Final travel portal. System integrity: restoring.<br>
+      <em>Extraction successful. Christy — you saved Christmas.</em>"
+    </div>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/YOUR_VIDEO_4?autoplay=0&mute=1&rel=0&modestbranding=1&color=white"
+        title="Memory 04"
+        frameborder="0"
+        loading="lazy"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </section>
+
+  <!-- 13. ENDING -->
+  <section class="snap-section ending" aria-label="Ending">
     <div class="ending-card">
-
       <div class="ending-holly-tag">HOLLY-BRAN 2.0 — SYSTEM INTEGRITY RESTORED</div>
-
-      <div class="ending-stars" aria-hidden="true">★ ★ ★ ★ ★</div>
-
+      <div class="ending-stars">★ ★ ★ ★ ★</div>
       <h1>Merry Christmas, Stee ❤️</h1>
-
       <div class="ending-dialogue">
         <p>"I was built to grant Christmas wishes.<br>
         I am still… not very good at that.<br><br>
@@ -308,15 +303,14 @@
         <p class="ending-sign">"Original Brandon… you may give her the last gift."</p>
         <p class="ending-sign sign-small">— HOLLY-BRAN 2.0 · End of Transmission</p>
       </div>
-
       <div class="credits-block">
         <p class="credits">CREATED BY BRANDON</p>
         <p class="credits-year">Christmas 2026 &nbsp;·&nbsp; 🥔 No potatoes were harmed</p>
       </div>
-
     </div>
   </section>
 
+</div><!-- /#snap-container -->
 </div><!-- /#experience -->
 
 <script src="script.js"></script>
