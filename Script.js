@@ -6,25 +6,22 @@
   'use strict';
 
   // ── ELEMENTS ───────────────────────────
-  const startScreen  = document.getElementById('start-screen');
-  const startButton  = document.getElementById('startButton');
-  const experience   = document.getElementById('experience');
-  const introMusic   = document.getElementById('introMusic');
-  const worldSound   = document.getElementById('worldSound');
-  const secretSound  = document.getElementById('secretSound');
+  var startScreen = document.getElementById('start-screen');
+  var startButton = document.getElementById('startButton');
+  var experience  = document.getElementById('experience');
+  var introMusic  = document.getElementById('introMusic');
+  var worldSound  = document.getElementById('worldSound');
+  var secretSound = document.getElementById('secretSound');
 
   // ── HELPERS ────────────────────────────
 
   function playSound(audio) {
     if (!audio) return;
     audio.currentTime = 0;
-    audio.play().catch(function () {
-      // Autoplay blocked by browser — silent fail is fine
-    });
+    audio.play().catch(function () {});
   }
 
   // ── START BUTTON ────────────────────────
-  // Keyboard: Enter / Space also triggers start
 
   startButton.addEventListener('click', handleStart);
   startButton.addEventListener('keydown', function (e) {
@@ -34,23 +31,20 @@
   function handleStart() {
     playSound(introMusic);
 
-    // Fade out start screen
     startScreen.classList.add('hidden');
     startScreen.addEventListener('transitionend', function () {
       startScreen.remove();
     }, { once: true });
 
-    // Reveal main experience
     experience.style.display = 'block';
     experience.removeAttribute('aria-hidden');
 
-    // Kick off scroll-based effects
+    // Kick off all scroll observers
     initScrollObserver();
+    initGameFrames();
   }
 
   // ── WORLD TRANSITION OBSERVER ──────────
-  // Plays world-transition sound and animates
-  // the world card when it scrolls into view.
 
   function initScrollObserver() {
     var worldSections = document.querySelectorAll('.transition-section');
@@ -71,7 +65,6 @@
             var card = target.querySelector('.world-card');
             if (card) {
               card.style.animation = 'none';
-              // Force reflow then restart
               void card.offsetWidth;
               card.style.animation = '';
             }
@@ -89,20 +82,44 @@
     if (secretSection) observer.observe(secretSection);
   }
 
-  // ── GAME FRAME ERROR DETECTION ─────────
-  // Shows the hint paragraph if a game frame
-  // fails to load (only meaningful on a server).
+  // ── GAME FRAME LAZY LOAD / UNLOAD ──────
+  // Iframes use data-src instead of src.
+  // The src is only set when the iframe scrolls
+  // into view, and cleared when it scrolls away
+  // — so only one ROM runs at a time.
 
-  var gameFrames = document.querySelectorAll('.game-frame');
-  gameFrames.forEach(function (frame) {
-    frame.addEventListener('error', function () {
-      var hint = frame.closest('.game-section')
-                      .querySelector('.game-hint');
-      if (hint) hint.style.opacity = '1';
+  function initGameFrames() {
+    var gameFrames = document.querySelectorAll('.game-frame');
+
+    var gameObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          var frame = entry.target;
+          var dataSrc = frame.getAttribute('data-src');
+
+          if (entry.isIntersecting) {
+            // Load emulator only when scrolled into view
+            if (dataSrc && frame.getAttribute('src') !== dataSrc) {
+              frame.setAttribute('src', dataSrc);
+            }
+          } else {
+            // Unload when scrolled away — stops audio & CPU
+            if (frame.getAttribute('src')) {
+              frame.removeAttribute('src');
+            }
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    gameFrames.forEach(function (frame) {
+      gameObserver.observe(frame);
     });
-  });
+  }
 
   // ── KONAMI CODE EASTER EGG ─────────────
+
   var konamiSequence = [
     'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
     'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
@@ -123,7 +140,6 @@
   });
 
   function activateKonami() {
-    // Flash the page gold briefly
     var flash = document.createElement('div');
     flash.style.cssText = [
       'position:fixed',
