@@ -30,8 +30,10 @@
 
   EJS_core = "snes";
 
-  EJS_pathtodata = "data/";
+  // ✅ Using CDN — no local data/ folder needed
+  EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
 
+  // ✅ Path to your ROM relative to this file
   EJS_gameUrl = "../roms/DCA1.smc";
 
   EJS_startOnLoaded = true;
@@ -45,7 +47,8 @@
   };
 </script>
 
-<script src="loader.js"></script>
+<!-- ✅ Loader from CDN — no local loader.js needed -->
+<script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 
 </body>
 </html>
