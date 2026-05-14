@@ -12,7 +12,7 @@
   var worldSound  = document.getElementById('worldSound');
   var secretSound = document.getElementById('secretSound');
 
-  // ── POTATO FACTS BY LOCATION ──
+  // ── POTATO FACTS ──
   var facts = {
     california: [
       "In 1926, Laura Scudder of Monterey Park invented the first sealed wax-paper bag for potato chips — revolutionizing snack packaging and the potato module's entire worldview.",
@@ -43,9 +43,9 @@
   }
 
   function injectFacts() {
-    var cal  = document.getElementById('fact-california');
-    var veg  = document.getElementById('fact-vegas');
-    var sum  = document.getElementById('fact-summerlin');
+    var cal = document.getElementById('fact-california');
+    var veg = document.getElementById('fact-vegas');
+    var sum = document.getElementById('fact-summerlin');
     if (cal) cal.textContent = getRandomFact('california');
     if (veg) veg.textContent = getRandomFact('vegas');
     if (sum) sum.textContent = getRandomFact('summerlin');
@@ -78,15 +78,14 @@
   }
 
   // ── SNOW ──
-  // Snow only renders when NOT on a video or game section.
-  // This prevents snowflakes from appearing over iframes.
-  var snowActive = true;
-
+  // Uses scroll position on the snap container to detect which
+  // section is active. Hides snow on video/game sections only.
   function initSnow() {
     var canvas = document.getElementById('snow');
     if (!canvas) return;
     var ctx = canvas.getContext('2d');
     var flakes = [];
+    var snowVisible = true; // start visible — hero is first section
 
     function resize() {
       canvas.width  = window.innerWidth;
@@ -108,7 +107,7 @@
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (snowActive) {
+      if (snowVisible) {
         flakes.forEach(function (f) {
           ctx.beginPath();
           ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
@@ -125,27 +124,34 @@
     }
     draw();
 
-    // Watch which section is visible and pause snow on video/game sections
-    var sections = document.querySelectorAll('.snap-section');
-    var sectionObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var isMediaSection = el.classList.contains('video-section') || el.classList.contains('game-section');
-        snowActive = !isMediaSection;
-        // Also hide/show the canvas itself for extra safety
-        canvas.style.opacity = snowActive ? '1' : '0';
-      });
-    }, { threshold: 0.6 });
+    // Check which section is snapped to on scroll
+    var snapContainer = document.getElementById('snap-container');
+    if (!snapContainer) return;
 
-    sections.forEach(function (s) { sectionObserver.observe(s); });
+    function checkCurrentSection() {
+      var scrollTop = snapContainer.scrollTop;
+      var vh = window.innerHeight;
+      // Which section index are we on?
+      var index = Math.round(scrollTop / vh);
+      var sections = snapContainer.querySelectorAll('.snap-section');
+      var current = sections[index];
+      if (!current) {
+        snowVisible = true;
+        return;
+      }
+      var isMedia = current.classList.contains('video-section') ||
+                    current.classList.contains('game-section');
+      snowVisible = !isMedia;
+    }
+
+    snapContainer.addEventListener('scroll', checkCurrentSection, { passive: true });
+    // Run once on init so hero shows snow immediately
+    checkCurrentSection();
   }
 
   // ── GAME FRAME LAZY LOAD / UNLOAD ──
-  // Only the visible game runs — others are unloaded.
   function initGameFrames() {
     var gameFrames = document.querySelectorAll('.game-frame');
-
     var gameObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var frame = entry.target;
@@ -161,7 +167,6 @@
         }
       });
     }, { threshold: 0.3 });
-
     gameFrames.forEach(function (f) { gameObserver.observe(f); });
   }
 
