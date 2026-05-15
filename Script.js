@@ -65,13 +65,30 @@
   });
 
   function handleStart() {
+    // Prevent double-firing
+    startButton.removeEventListener('click', handleStart);
+
     playSound(introMusic);
-    startScreen.classList.add('hidden');
-    startScreen.addEventListener('transitionend', function () {
-      startScreen.remove();
-    }, { once: true });
+
+    // Show experience immediately
     experience.style.display = 'block';
+    experience.style.height  = '100vh';
+    experience.style.width   = '100%';
     experience.removeAttribute('aria-hidden');
+
+    // Fade out start screen
+    startScreen.classList.add('hidden');
+
+    // Remove start screen after transition — with timeout fallback
+    var removed = false;
+    function removeStart() {
+      if (removed) return;
+      removed = true;
+      if (startScreen.parentNode) startScreen.remove();
+    }
+    startScreen.addEventListener('transitionend', removeStart, { once: true });
+    setTimeout(removeStart, 1000); // fallback if transitionend doesn't fire
+
     injectFacts();
     initSnow();
     initGameFrames();
