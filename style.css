@@ -39,7 +39,7 @@ body {
   background: var(--black);
   color: var(--white);
   font-family: var(--font);
-  font-size: 10px;
+  font-size: 14px; /* bumped for 65" TV legibility */
   line-height: 1.9;
   overflow: hidden; /* snap container handles scroll */
 }
@@ -440,8 +440,8 @@ body::after {
 .video-wrapper {
   position: relative;
   width: 100%;
-  max-width: 860px;
-  padding-bottom: min(56.25%, 52vh);
+  max-width: min(1400px, 90vw);
+  padding-bottom: min(56.25%, 58vh);
   background: #000;
   border: 4px solid var(--neon-green);
   border-radius: 2px;
@@ -464,7 +464,7 @@ body::after {
 .game-wrapper {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: min(1400px, 90vw);
   background: #000;
   border: 4px solid var(--neon-green);
   border-radius: 2px;
@@ -684,4 +684,31 @@ body::after {
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
   }
+}
+
+/* ═══════════════════════════════════════
+   TV / LARGE DISPLAY (1080p+)
+═══════════════════════════════════════ */
+@media (min-width: 1600px) {
+  body { font-size: 16px; }
+
+  .glow       { font-size: 3.5rem; }
+  .holly-tag  { font-size: .55rem; }
+  .hero-sub   { font-size: .65rem; }
+  .dialogue-box { font-size: .58rem; }
+  .holly-quip   { font-size: .55rem; }
+  .section-label { font-size: .62rem; }
+  .fact-title   { font-size: 1.4rem; }
+  .fact-body    { font-size: .58rem; }
+  .fact-location { font-size: .55rem; }
+  .fact-holly   { font-size: .5rem; }
+  .world-number { font-size: 3.5rem; }
+  .world-name   { font-size: .85rem; }
+  .world-dialogue { font-size: .52rem; }
+  .ending-card h1 { font-size: 1.8rem; }
+  .ending-dialogue { font-size: .52rem; }
+  .superpower-list li { font-size: .5rem; }
+  #startButton  { font-size: .85rem; padding: 1.4rem 3rem; }
+  .game-hint    { font-size: .5rem; }
+  .scroll-indicator { font-size: .55rem; }
 }
