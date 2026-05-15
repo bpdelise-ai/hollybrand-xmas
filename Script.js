@@ -232,20 +232,18 @@
     // ── TITLE ──
     var title = document.createElement('div');
     title.textContent = '🥔 POTATO PARTY 🥔';
-    title.style.cssText = [
-      'font-family:'Press Start 2P',monospace',
-      'font-size:clamp(1.2rem,5vw,2.8rem)',
-      'text-align:center',
-      'animation:potatoTitle 0.4s ease-out both',
-      'z-index:2',
-      'position:relative'
-    ].join(';');
+    title.style.fontFamily = '"Press Start 2P", monospace';
+    title.style.fontSize = 'clamp(1.2rem, 5vw, 2.8rem)';
+    title.style.textAlign = 'center';
+    title.style.animation = 'potatoTitle 0.4s ease-out both';
+    title.style.zIndex = '2';
+    title.style.position = 'relative';
     overlay.appendChild(title);
 
     var sub = document.createElement('div');
     sub.textContent = 'CHEAT CODE ACTIVATED';
     sub.style.cssText = [
-      'font-family:'Press Start 2P',monospace',
+      "font-family: \"Press Start 2P\", monospace",
       'font-size:clamp(0.3rem,1.2vw,0.55rem)',
       'color:#aaa',
       'margin-top:1rem',
