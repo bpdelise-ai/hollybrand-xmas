@@ -59,8 +59,10 @@
   }
 
   // ── START ──
+  // Click anywhere on the present OR press Enter/Space to unwrap
   startButton.addEventListener('click', handleStart);
-  startButton.addEventListener('keydown', function (e) {
+  startScreen.addEventListener('click', handleStart);
+  document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' || e.key === ' ') handleStart();
   });
 
