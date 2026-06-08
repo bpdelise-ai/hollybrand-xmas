@@ -173,13 +173,20 @@
   }
 
   // ── GAME FRAME LAZY LOAD / UNLOAD ──
+  // Does NOT load if the parent section is still locked
   function initGameFrames() {
     var gameFrames = document.querySelectorAll('.game-frame');
     var gameObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        var frame = entry.target;
+        var frame   = entry.target;
         var dataSrc = frame.getAttribute('data-src');
-        if (entry.isIntersecting) {
+
+        // Check if this frame lives inside a locked section
+        var parentSection = frame.closest('[data-section]');
+        var sectionNum    = parentSection ? parseInt(parentSection.getAttribute('data-section')) : null;
+        var isLocked      = sectionNum && !unlockedSections[sectionNum];
+
+        if (entry.isIntersecting && !isLocked) {
           if (dataSrc && frame.getAttribute('src') !== dataSrc) {
             frame.setAttribute('src', dataSrc);
           }
@@ -249,6 +256,16 @@
     var code    = SECTION_CODES[sectionNum];
     var overlay = document.createElement('div');
     overlay.className = 'lock-overlay';
+
+    // Only the FIRST section element gets the interactive unlock overlay
+    // All subsequent ones for the same section just get a silent black blocker
+    var isFirstOfSection = !document.getElementById('lock-overlay-' + sectionNum);
+    if (!isFirstOfSection) {
+      overlay.style.cssText = 'position:absolute;inset:0;z-index:500;background:var(--black)';
+      overlay.setAttribute('data-silent-lock', sectionNum);
+      sectionEl.appendChild(overlay);
+      return;
+    }
     overlay.id = 'lock-overlay-' + sectionNum;
 
     var labels = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→' };
@@ -346,23 +363,45 @@
     lockInputBuffer   = [];
     playSound(secretSound);
 
-    var overlay = document.getElementById('lock-overlay-' + sectionNum);
-    if (!overlay) return;
+    // Remove ALL overlays belonging to this section number at once
+    var overlays = document.querySelectorAll('.lock-overlay[id^="lock-overlay-"]');
+    overlays.forEach(function (overlay) {
+      if (overlay.id === 'lock-overlay-' + sectionNum) {
+        var icon = overlay.querySelector('.lock-icon');
+        if (icon) icon.textContent = '🔓';
+        var title = overlay.querySelector('.lock-title');
+        if (title) {
+          title.textContent = 'SECTION ' + sectionNum + ' UNLOCKED';
+          title.style.color = 'var(--neon-green)';
+        }
+        overlay.classList.add('unlocking', 'unlocked');
+        setTimeout(function () { overlay.style.display = 'none'; }, 900);
+      }
+    });
 
-    overlay.classList.add('unlocking', 'unlocked');
+    // Also hide silent blockers on ALL sections tagged with this section number
+    var allSectionEls = document.querySelectorAll('[data-section="' + sectionNum + '"]');
+    allSectionEls.forEach(function (el) {
+      var ov = el.querySelector('.lock-overlay');
+      if (ov && ov.id !== 'lock-overlay-' + sectionNum) {
+        setTimeout(function () { ov.style.display = 'none'; }, 950);
+      }
+    });
 
-    // Swap lock icon to celebration
-    var icon = overlay.querySelector('.lock-icon');
-    if (icon) icon.textContent = '🔓';
-    var title = overlay.querySelector('.lock-title');
-    if (title) {
-      title.textContent = 'SECTION ' + sectionNum + ' UNLOCKED';
-      title.style.color = 'var(--neon-green)';
-    }
-
+    // Re-check game frames for this section so they load after unlock
     setTimeout(function () {
-      overlay.style.display = 'none';
-    }, 900);
+      var frames = document.querySelectorAll('[data-section="' + sectionNum + '"] .game-frame');
+      frames.forEach(function (frame) {
+        var dataSrc = frame.getAttribute('data-src');
+        if (dataSrc && !frame.getAttribute('src')) {
+          // Only load if currently visible on screen
+          var rect = frame.getBoundingClientRect();
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            frame.setAttribute('src', dataSrc);
+          }
+        }
+      });
+    }, 1000);
   }
 
   // ── POTATO PARTY CHEAT CODE ──
