@@ -822,3 +822,27 @@ body::after {
   top: 1rem;
   right: 1.5rem;
 }
+
+.lock-activate-btn {
+  font-family: var(--font);
+  font-size: clamp(0.42rem, 1.2vw, 0.58rem);
+  color: var(--white);
+  border: 3px solid var(--white);
+  background: transparent;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  letter-spacing: 0.1em;
+  margin-bottom: 1.2rem;
+  animation: blink-slow 2s ease-in-out infinite;
+  transition: all 0.2s;
+  user-select: none;
+}
+.lock-activate-btn:hover {
+  background: rgba(255,255,255,0.1);
+}
+.lock-activate-btn.active {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  box-shadow: 0 0 10px var(--neon-green), 0 0 25px var(--neon-green);
+  animation: neon-xmas 2s ease-in-out infinite;
+}

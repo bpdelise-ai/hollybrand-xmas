@@ -223,9 +223,6 @@
   var activeLockSection = null;
 
   function initLockSystem() {
-    var snapContainer = document.getElementById('snap-container');
-    if (!snapContainer) return;
-
     // Build overlays for all locked sections
     var lockedEls = document.querySelectorAll('.locked-section');
     lockedEls.forEach(function (el) {
@@ -233,29 +230,19 @@
       buildLockOverlay(el, sectionNum);
     });
 
-    // Watch scroll — when hitting a locked section, focus the lock input
-    snapContainer.addEventListener('scroll', function () {
-      var scrollTop = snapContainer.scrollTop;
-      var vh        = window.innerHeight;
-      var index     = Math.round(scrollTop / vh);
-      var sections  = snapContainer.querySelectorAll('.snap-section');
-      var current   = sections[index];
-      if (!current) return;
+    // Listen for arrow key input — only fires when lockListening is true
+    // (i.e. user clicked the overlay to activate it)
+    document.addEventListener('keydown', function (e) {
+      if (!lockListening) return;
+      var arrows = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+      if (!arrows.includes(e.key)) return;
 
-      var sectionNum = parseInt(current.getAttribute('data-section'));
-      if (sectionNum && !unlockedSections[sectionNum]) {
-        activeLockSection = sectionNum;
-        lockListening     = true;
-        lockInputBuffer   = [];
-        updateDots(sectionNum, []);
-      } else {
-        lockListening     = false;
-        activeLockSection = null;
-      }
-    }, { passive: true });
+      // Prevent arrow keys from scrolling the snap container while entering code
+      e.preventDefault();
+      e.stopPropagation();
 
-    // Listen for arrow key input anywhere
-    document.addEventListener('keydown', handleLockInput);
+      handleLockInput(e);
+    });
   }
 
   function buildLockOverlay(sectionEl, sectionNum) {
@@ -279,10 +266,27 @@
       '<div class="lock-dots" id="lock-dots-' + sectionNum + '">',
         code.map(function(){ return '<div class="lock-dot"></div>'; }).join(''),
       '</div>',
-      '<div class="lock-hint">USE ARROW KEYS · ' + codeDisplay + ' (IF YOU KNOW IT)</div>'
+      '<div class="lock-activate-btn" id="lock-btn-' + sectionNum + '">',
+        '🔑 TAP HERE THEN ENTER CODE',
+      '</div>',
+      '<div class="lock-hint" id="lock-hint-' + sectionNum + '">USE ARROW KEYS AFTER TAPPING ABOVE</div>'
     ].join('');
 
     sectionEl.appendChild(overlay);
+
+    // Click the activate button to start listening for arrow keys
+    var activateBtn = overlay.querySelector('.lock-activate-btn');
+    activateBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      activeLockSection = sectionNum;
+      lockListening     = true;
+      lockInputBuffer   = [];
+      updateDots(sectionNum, []);
+      activateBtn.textContent = '🎮 ENTER CODE NOW...';
+      activateBtn.classList.add('active');
+      var hint = document.getElementById('lock-hint-' + sectionNum);
+      if (hint) hint.style.color = 'var(--neon-green)';
+    });
   }
 
   function updateDots(sectionNum, buffer) {
@@ -309,9 +313,6 @@
   }
 
   function handleLockInput(e) {
-    // Skip if cheat code keys already handled above, or not listening
-    var arrows = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
-    if (!arrows.includes(e.key)) return;
     if (!lockListening || !activeLockSection) return;
     if (unlockedSections[activeLockSection]) return;
 
