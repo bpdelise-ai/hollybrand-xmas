@@ -712,3 +712,113 @@ body::after {
   .game-hint    { font-size: .5rem; }
   .scroll-indicator { font-size: .55rem; }
 }
+
+/* ═══════════════════════════════════════
+   SECTION LOCK SYSTEM
+═══════════════════════════════════════ */
+
+/* Locked sections are hidden behind an overlay */
+.locked-section {
+  position: relative;
+}
+
+/* The lock overlay sits on top of the entire section */
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+  transition: opacity 0.8s ease;
+}
+
+.lock-overlay.unlocking {
+  pointer-events: none;
+}
+
+.lock-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  animation: blink-slow 2s ease-in-out infinite;
+}
+
+.lock-title {
+  font-family: var(--font);
+  font-size: clamp(0.8rem, 2.5vw, 1.4rem);
+  animation: neon-xmas 4s ease-in-out infinite;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.lock-subtitle {
+  font-family: var(--font);
+  font-size: clamp(0.38rem, 1vw, 0.52rem);
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 2.5rem;
+  line-height: 2.4;
+}
+
+/* Code input dots */
+.lock-dots {
+  display: flex;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.lock-dot {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.lock-dot.active {
+  border-color: var(--neon-green);
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green), 0 0 20px var(--neon-green);
+}
+
+.lock-dot.wrong {
+  border-color: var(--neon-red);
+  background: var(--neon-red);
+  box-shadow: 0 0 8px var(--neon-red);
+  animation: blink 0.15s step-end 4;
+}
+
+.lock-hint {
+  font-family: var(--font);
+  font-size: 0.38rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  opacity: 0.6;
+}
+
+/* Unlock flash */
+@keyframes unlock-flash {
+  0%   { opacity: 1; }
+  30%  { opacity: 0.2; background: var(--neon-green); }
+  60%  { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+.lock-overlay.unlocked {
+  animation: unlock-flash 0.8s ease forwards;
+}
+
+/* Section number badge */
+.lock-section-badge {
+  font-family: var(--font);
+  font-size: 0.38rem;
+  color: var(--border);
+  letter-spacing: 0.2em;
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+}

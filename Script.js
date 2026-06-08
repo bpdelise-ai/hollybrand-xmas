@@ -94,6 +94,7 @@
     injectFacts();
     initSnow();
     initGameFrames();
+    initLockSystem();
   }
 
   // ── SNOW ──
@@ -190,6 +191,177 @@
       });
     }, { threshold: 0.3 });
     gameFrames.forEach(function (f) { gameObserver.observe(f); });
+  }
+
+
+  // ══════════════════════════════════════════
+  // SECTION LOCK SYSTEM
+  // ══════════════════════════════════════════
+  //
+  // Codes to unlock each section (directional):
+  //   Section 2: U L D R U L D R   (↑ ← ↓ → ↑ ← ↓ →)
+  //   Section 3: U U D D L L R R   (↑ ↑ ↓ ↓ ← ← → →)
+  //   Section 4: R R U U L L D D   (→ → ↑ ↑ ← ← ↓ ↓)
+  //   Section 5: U D U D L R L R   (↑ ↓ ↑ ↓ ← → ← →)
+  //
+  // These match what Brandon hides in each game.
+  // ══════════════════════════════════════════
+
+  var SECTION_CODES = {
+    2: ['ArrowUp','ArrowLeft','ArrowDown','ArrowRight','ArrowUp','ArrowLeft','ArrowDown','ArrowRight'],
+    3: ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowLeft','ArrowRight','ArrowRight'],
+    4: ['ArrowRight','ArrowRight','ArrowUp','ArrowUp','ArrowLeft','ArrowLeft','ArrowDown','ArrowDown'],
+    5: ['ArrowUp','ArrowDown','ArrowUp','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight']
+  };
+
+  // Which sections are currently unlocked
+  var unlockedSections = { 1: true, 2: false, 3: false, 4: false, 5: false };
+
+  // Current input buffer
+  var lockInputBuffer = [];
+  var lockListening   = false;
+  var activeLockSection = null;
+
+  function initLockSystem() {
+    var snapContainer = document.getElementById('snap-container');
+    if (!snapContainer) return;
+
+    // Build overlays for all locked sections
+    var lockedEls = document.querySelectorAll('.locked-section');
+    lockedEls.forEach(function (el) {
+      var sectionNum = parseInt(el.getAttribute('data-section'));
+      buildLockOverlay(el, sectionNum);
+    });
+
+    // Watch scroll — when hitting a locked section, focus the lock input
+    snapContainer.addEventListener('scroll', function () {
+      var scrollTop = snapContainer.scrollTop;
+      var vh        = window.innerHeight;
+      var index     = Math.round(scrollTop / vh);
+      var sections  = snapContainer.querySelectorAll('.snap-section');
+      var current   = sections[index];
+      if (!current) return;
+
+      var sectionNum = parseInt(current.getAttribute('data-section'));
+      if (sectionNum && !unlockedSections[sectionNum]) {
+        activeLockSection = sectionNum;
+        lockListening     = true;
+        lockInputBuffer   = [];
+        updateDots(sectionNum, []);
+      } else {
+        lockListening     = false;
+        activeLockSection = null;
+      }
+    }, { passive: true });
+
+    // Listen for arrow key input anywhere
+    document.addEventListener('keydown', handleLockInput);
+  }
+
+  function buildLockOverlay(sectionEl, sectionNum) {
+    var code    = SECTION_CODES[sectionNum];
+    var overlay = document.createElement('div');
+    overlay.className = 'lock-overlay';
+    overlay.id = 'lock-overlay-' + sectionNum;
+
+    var labels = { ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→' };
+    var codeDisplay = code.map(function(k){ return labels[k]; }).join(' ');
+
+    overlay.innerHTML = [
+      '<div class="lock-section-badge">SECTION ' + sectionNum + '</div>',
+      '<div class="lock-icon">🔒</div>',
+      '<div class="lock-title">SECTION ' + sectionNum + ' LOCKED</div>',
+      '<div class="lock-subtitle">',
+        '"A code is hidden somewhere in the previous game.<br>',
+        'Find it. Enter it. Unlock what comes next."<br>',
+        '<span style="color:var(--neon-green);font-size:.9em;">— HOLLY-BRAN 2.0</span>',
+      '</div>',
+      '<div class="lock-dots" id="lock-dots-' + sectionNum + '">',
+        code.map(function(){ return '<div class="lock-dot"></div>'; }).join(''),
+      '</div>',
+      '<div class="lock-hint">USE ARROW KEYS · ' + codeDisplay + ' (IF YOU KNOW IT)</div>'
+    ].join('');
+
+    sectionEl.appendChild(overlay);
+  }
+
+  function updateDots(sectionNum, buffer) {
+    var dotsEl = document.getElementById('lock-dots-' + sectionNum);
+    if (!dotsEl) return;
+    var dots = dotsEl.querySelectorAll('.lock-dot');
+    dots.forEach(function (dot, i) {
+      dot.classList.remove('active', 'wrong');
+      if (i < buffer.length) dot.classList.add('active');
+    });
+  }
+
+  function flashWrongDots(sectionNum) {
+    var dotsEl = document.getElementById('lock-dots-' + sectionNum);
+    if (!dotsEl) return;
+    var dots = dotsEl.querySelectorAll('.lock-dot');
+    dots.forEach(function (dot) {
+      dot.classList.remove('active');
+      dot.classList.add('wrong');
+    });
+    setTimeout(function () {
+      dots.forEach(function (dot) { dot.classList.remove('wrong'); });
+    }, 600);
+  }
+
+  function handleLockInput(e) {
+    // Skip if cheat code keys already handled above, or not listening
+    var arrows = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
+    if (!arrows.includes(e.key)) return;
+    if (!lockListening || !activeLockSection) return;
+    if (unlockedSections[activeLockSection]) return;
+
+    var code = SECTION_CODES[activeLockSection];
+    lockInputBuffer.push(e.key);
+
+    // Trim buffer to code length
+    if (lockInputBuffer.length > code.length) {
+      lockInputBuffer = lockInputBuffer.slice(-code.length);
+    }
+
+    updateDots(activeLockSection, lockInputBuffer);
+
+    // Check if last N keys match the code
+    if (lockInputBuffer.length === code.length) {
+      var match = code.every(function (k, i) { return k === lockInputBuffer[i]; });
+      if (match) {
+        unlockSection(activeLockSection);
+      } else {
+        flashWrongDots(activeLockSection);
+        lockInputBuffer = [];
+        setTimeout(function () { updateDots(activeLockSection, []); }, 700);
+      }
+    }
+  }
+
+  function unlockSection(sectionNum) {
+    unlockedSections[sectionNum] = true;
+    lockListening     = false;
+    activeLockSection = null;
+    lockInputBuffer   = [];
+    playSound(secretSound);
+
+    var overlay = document.getElementById('lock-overlay-' + sectionNum);
+    if (!overlay) return;
+
+    overlay.classList.add('unlocking', 'unlocked');
+
+    // Swap lock icon to celebration
+    var icon = overlay.querySelector('.lock-icon');
+    if (icon) icon.textContent = '🔓';
+    var title = overlay.querySelector('.lock-title');
+    if (title) {
+      title.textContent = 'SECTION ' + sectionNum + ' UNLOCKED';
+      title.style.color = 'var(--neon-green)';
+    }
+
+    setTimeout(function () {
+      overlay.style.display = 'none';
+    }, 900);
   }
 
   // ── POTATO PARTY CHEAT CODE ──
