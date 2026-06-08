@@ -361,7 +361,30 @@
     lockListening     = false;
     activeLockSection = null;
     lockInputBuffer   = [];
-    playSound(secretSound);
+
+    // ── UNLOCK AUDIO SEQUENCE ──
+    // 1. Play both SFX simultaneously
+    var sfx1 = document.getElementById('unlockSfx1');
+    var sfx2 = document.getElementById('unlockSfx2');
+    if (sfx1) { sfx1.currentTime = 0; sfx1.play().catch(function(){}); }
+    if (sfx2) { sfx2.currentTime = 0; sfx2.play().catch(function(){}); }
+
+    // 2. After both SFX finish (use the longer one as reference), play random voice
+    // mk3-01095 and mk3-01040 are short SFX — we wait ~1.2s then play the voice
+    setTimeout(function () {
+      var voices = [
+        document.getElementById('unlockVoice1'),
+        document.getElementById('unlockVoice2')
+      ];
+      var voice = voices[Math.floor(Math.random() * voices.length)];
+      if (voice) { voice.currentTime = 0; voice.play().catch(function(){}); }
+    }, 1200);
+
+    // ── SCREEN SHAKE ──
+    document.body.classList.add('shaking');
+    document.body.addEventListener('animationend', function () {
+      document.body.classList.remove('shaking');
+    }, { once: true });
 
     // Remove ALL overlays belonging to this section number at once
     var overlays = document.querySelectorAll('.lock-overlay[id^="lock-overlay-"]');
