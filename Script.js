@@ -32,14 +32,139 @@
 
 function injectFacts() {
     var cal = document.getElementById('fact-california');
-    var rrc = document.getElementById('fact-vegas'); // Maps Section 2's container to Red Rock Canyon
-    var veg = document.getElementById('fact-las-vegas'); // Ensure your HTML Las Vegas ID matches this if decoupled
+    var rrc = document.getElementById('fact-vegas');
     var sum = document.getElementById('fact-summerlin');
+    var sum2 = document.getElementById('fact-summerlin-2');
 
     if (cal) cal.textContent = getRandomFact('california');
     if (rrc) rrc.textContent = getRandomFact('red rock canyon');
-    if (veg) veg.textContent = getRandomFact('las vegas');
     if (sum) sum.textContent = getRandomFact('summerlin');
+    if (sum2) sum2.textContent = getRandomFact('summerlin');
+  }
+
+  // ── POTATO FACT REVEAL ──
+  var activeFactBtn = null;
+
+  function initFactReveal() {
+    var btns = document.querySelectorAll('.fact-reveal-btn');
+    btns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeFactBtn = btn;
+      });
+      btn.addEventListener('focus', function () {
+        activeFactBtn = btn;
+      });
+      // Allow clicking directly to reveal (no Enter required on mobile / mouse)
+      btn.addEventListener('dblclick', function () {
+        revealFact(btn);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return;
+      // Find the fact-reveal-btn that's currently focused or in the visible snap section
+      var focusedBtn = document.querySelector('.fact-reveal-btn:focus');
+      if (focusedBtn) { revealFact(focusedBtn); return; }
+      // Find the visible fact section
+      var snapContainer = document.getElementById('snap-container');
+      if (!snapContainer) return;
+      var scrollTop = snapContainer.scrollTop;
+      var vh = window.innerHeight;
+      var index = Math.round(scrollTop / vh);
+      var sections = snapContainer.querySelectorAll('.snap-section');
+      var current = sections[index];
+      if (!current) return;
+      var btn = current.querySelector('.fact-reveal-btn:not(.revealed)');
+      if (btn) revealFact(btn);
+    });
+  }
+
+  function revealFact(btn) {
+    if (!btn || btn.classList.contains('revealed')) return;
+    var factId = btn.getAttribute('data-fact-id');
+    var factEl = document.getElementById(factId);
+    if (!factEl) return;
+
+    btn.classList.add('revealed');
+    factEl.classList.add('revealed');
+
+    // Update title
+    var card = btn.closest('.fact-card');
+    if (card) {
+      var title = card.querySelector('.fact-title');
+      if (title) { title.textContent = 'POTATO FACT UNLOCKED'; }
+    }
+
+    // Screen shake
+    document.body.classList.add('shaking');
+    document.body.addEventListener('animationend', function () {
+      document.body.classList.remove('shaking');
+    }, { once: true });
+
+    // Potato fireworks
+    triggerFactFireworks();
+  }
+
+  function triggerFactFireworks() {
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99998';
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+
+    var emojis = ['🥔','🥔','🥔','🍟','✨','💥','🥔'];
+    var particles = [];
+
+    function spawnBurst(x, y) {
+      var count = 18;
+      for (var i = 0; i < count; i++) {
+        var angle = (Math.PI * 2 / count) * i;
+        var speed = 3 + Math.random() * 6;
+        particles.push({
+          x: x, y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          life: 1, decay: 0.018 + Math.random() * 0.01,
+          size: 22 + Math.random() * 10,
+          emoji: emojis[Math.floor(Math.random() * emojis.length)],
+          rotation: Math.random() * 6.28,
+          rotSpeed: (Math.random() - 0.5) * 0.12,
+          gravity: 0.18
+        });
+      }
+    }
+
+    // Burst from center and two sides
+    spawnBurst(window.innerWidth / 2, window.innerHeight / 2);
+    setTimeout(function () { spawnBurst(window.innerWidth * 0.25, window.innerHeight * 0.4); }, 200);
+    setTimeout(function () { spawnBurst(window.innerWidth * 0.75, window.innerHeight * 0.4); }, 400);
+
+    var animId;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(function (p) { return p.life > 0; });
+      particles.forEach(function (p) {
+        ctx.save();
+        ctx.globalAlpha = p.life;
+        ctx.font = p.size + 'px serif';
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+        ctx.fillText(p.emoji, -p.size / 2, p.size / 2);
+        ctx.restore();
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.life -= p.decay;
+        p.rotation += p.rotSpeed;
+      });
+      if (particles.length > 0) {
+        animId = requestAnimationFrame(draw);
+      } else {
+        canvas.remove();
+      }
+    }
+    draw();
   }
 
   // ── SOUND ──
@@ -105,6 +230,7 @@ function injectFacts() {
     }
 
     injectFacts();
+    initFactReveal();
     initSnow();
     initGameFrames();
     initLockSystem();
@@ -236,6 +362,31 @@ function injectFacts() {
       e.stopPropagation();
       handleLockInput(e);
     });
+
+    // Prevent scrolling into locked sections
+    var snapContainer = document.getElementById('snap-container');
+    if (snapContainer) {
+      snapContainer.addEventListener('scroll', function () {
+        enforceLockScroll(snapContainer);
+      }, { passive: true });
+    }
+  }
+
+  function enforceLockScroll(container) {
+    var vh = window.innerHeight;
+    var scrollTop = container.scrollTop;
+    var index = Math.round(scrollTop / vh);
+    var sections = container.querySelectorAll('.snap-section');
+    var current = sections[index];
+    if (!current) return;
+
+    var sectionNum = parseInt(current.getAttribute('data-section'));
+    if (sectionNum && !unlockedSections[sectionNum]) {
+      // Snap back to the previous section
+      var prevIndex = index - 1;
+      if (prevIndex < 0) prevIndex = 0;
+      container.scrollTo({ top: prevIndex * vh, behavior: 'smooth' });
+    }
   }
 
   function buildLockOverlay(sectionEl, sectionNum) {

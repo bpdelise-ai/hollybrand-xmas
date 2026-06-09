@@ -871,6 +871,58 @@ body.shaking {
 #fact-california:empty,
 #fact-vegas:empty,
 #fact-las-vegas:empty,
-#fact-summerlin:empty {
+#fact-summerlin:empty,
+#fact-summerlin-2:empty {
   display: none !important;
+}
+
+/* Hide empty dialogue boxes and quip boxes */
+.dialogue-box:empty,
+.holly-quip:empty {
+  display: none !important;
+}
+/* Hide holly-quip if it has no real text content (only empty spans/br) */
+.holly-quip.quip-empty {
+  display: none !important;
+}
+
+/* ── LOCKED SECTIONS: prevent visibility ── */
+.locked-section {
+  overflow: hidden;
+}
+
+/* ── POTATO FACT REVEAL BUTTON ── */
+.fact-reveal-btn {
+  display: inline-block;
+  margin: 1.2rem auto 0;
+  padding: .8rem 1.4rem;
+  background: transparent;
+  border: 2px solid var(--potato);
+  color: var(--potato);
+  font-family: var(--font);
+  font-size: .42rem;
+  cursor: pointer;
+  letter-spacing: .1em;
+  animation: fact-pulse 1.8s ease-in-out infinite;
+  transition: background .2s, color .2s;
+}
+.fact-reveal-btn:hover,
+.fact-reveal-btn:focus {
+  background: var(--potato);
+  color: var(--black);
+  outline: none;
+}
+.fact-reveal-btn.revealed {
+  display: none;
+}
+.fact-body-text {
+  display: none;
+  font-size: .44rem;
+  line-height: 2.2;
+  color: var(--white);
+  margin-top: .8rem;
+  animation: slide-up 0.4s ease both;
+}
+.fact-body-text.revealed {
+  display: block;
 }
