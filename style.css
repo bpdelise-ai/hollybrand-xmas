@@ -865,3 +865,12 @@ body::after {
 body.shaking {
   animation: screen-shake 0.55s cubic-bezier(.36,.07,.19,.97) both;
 }
+
+
+/* Automatically hide fact containers if they are empty */
+#fact-california:empty,
+#fact-vegas:empty,
+#fact-las-vegas:empty,
+#fact-summerlin:empty {
+  display: none !important;
+}
