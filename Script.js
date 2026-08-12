@@ -33,11 +33,13 @@
 function injectFacts() {
     var cal = document.getElementById('fact-california');
     var rrc = document.getElementById('fact-vegas');
+    var lv = document.getElementById('fact-las-vegas'); // Add reference to the Las Vegas element
     var sum = document.getElementById('fact-summerlin');
     var sum2 = document.getElementById('fact-summerlin-2');
 
     if (cal) cal.textContent = getRandomFact('california');
     if (rrc) rrc.textContent = getRandomFact('red rock canyon');
+    if (lv) lv.textContent = getRandomFact('las vegas'); // Inject the Las Vegas fact
     if (sum) sum.textContent = getRandomFact('summerlin');
     if (sum2) sum2.textContent = getRandomFact('summerlin');
   }
@@ -372,7 +374,7 @@ function injectFacts() {
     }
   }
 
-  function enforceLockScroll(container) {
+function enforceLockScroll(container) {
     var vh = window.innerHeight;
     var scrollTop = container.scrollTop;
     var index = Math.round(scrollTop / vh);
@@ -382,10 +384,12 @@ function injectFacts() {
 
     var sectionNum = parseInt(current.getAttribute('data-section'));
     if (sectionNum && !unlockedSections[sectionNum]) {
-      // Snap back to the previous section
-      var prevIndex = index - 1;
-      if (prevIndex < 0) prevIndex = 0;
-      container.scrollTo({ top: prevIndex * vh, behavior: 'smooth' });
+      // Only snap back if the user scrolls past the main lock overlay into a silent lock
+      if (current.querySelector('[data-silent-lock]')) {
+        var prevIndex = index - 1;
+        if (prevIndex < 0) prevIndex = 0;
+        container.scrollTo({ top: prevIndex * vh, behavior: 'smooth' });
+      }
     }
   }
 
