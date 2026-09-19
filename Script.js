@@ -6,7 +6,7 @@
   'use strict';
 
   // Core variables declared in scope
-  var startScreen, startButton, experience, introMusic, worldSound, secretSound;
+ var startScreen, startButton, experience, introMusic, worldSound, secretSound, codeEntrySfx;
 
   // ── POTATO FACTS ──
   var facts = {
@@ -184,6 +184,7 @@ function injectFacts() {
     introMusic  = document.getElementById('introMusic');
     worldSound  = document.getElementById('worldSound');
     secretSound = document.getElementById('secretSound');
+    codeEntrySfx = document.getElementById('codeEntrySfx');
 
     // Protect against execution if target elements are missing
     if (!startButton || !startScreen) {
@@ -430,8 +431,9 @@ function enforceLockScroll(container) {
 
     var activateBtn = overlay.querySelector('.lock-activate-btn');
     activateBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      activeLockSection = sectionNum;
+  e.stopPropagation();
+  playSound(codeEntrySfx);
+  activeLockSection = sectionNum;
       lockListening     = true;
       lockInputBuffer   = [];
       updateDots(sectionNum, []);
