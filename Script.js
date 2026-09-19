@@ -6,7 +6,7 @@
   'use strict';
 
   // Core variables declared in scope
-var startScreen, startButton, experience, introMusic, worldSound, secretSound, potatoFactSfx;
+var startScreen, startButton, experience, introMusic, worldSound, secretSound, codeEntrySfx, potatoFactSfx;
 
   // ── POTATO FACTS ──
   var facts = {
