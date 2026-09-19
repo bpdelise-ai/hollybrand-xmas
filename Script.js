@@ -6,7 +6,7 @@
   'use strict';
 
   // Core variables declared in scope
- var startScreen, startButton, experience, introMusic, worldSound, secretSound, codeEntrySfx;
+var startScreen, startButton, experience, introMusic, worldSound, secretSound, potatoFactSfx;
 
   // ── POTATO FACTS ──
   var facts = {
@@ -89,9 +89,10 @@ function injectFacts() {
 
     btn.classList.add('revealed');
     factEl.classList.add('revealed');
+    playSound(potatoFactSfx);
 
     // Update title
-    var card = btn.closest('.fact-card');
+  var card = btn.closest('.fact-card');
     if (card) {
       var title = card.querySelector('.fact-title');
       if (title) { title.textContent = 'POTATO FACT UNLOCKED'; }
@@ -185,6 +186,7 @@ function injectFacts() {
     worldSound  = document.getElementById('worldSound');
     secretSound = document.getElementById('secretSound');
     codeEntrySfx = document.getElementById('codeEntrySfx');
+    potatoFactSfx = document.getElementById('potatoFactSfx');
 
     // Protect against execution if target elements are missing
     if (!startButton || !startScreen) {
