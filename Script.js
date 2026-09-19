@@ -89,10 +89,11 @@ function injectFacts() {
 
     btn.classList.add('revealed');
     factEl.classList.add('revealed');
+
     playSound(potatoFactSfx);
 
     // Update title
-  var card = btn.closest('.fact-card');
+    var card = btn.closest('.fact-card');
     if (card) {
       var title = card.querySelector('.fact-title');
       if (title) { title.textContent = 'POTATO FACT UNLOCKED'; }
@@ -195,10 +196,13 @@ function injectFacts() {
     }
 
     // Bind start screen inputs safely
-    startButton.addEventListener('click', handleStart);
-    startScreen.addEventListener('click', handleStart);
-    document.addEventListener('keydown', handleKeyPressStart);
-  }
+ // Bind start screen inputs safely
+startButton.addEventListener('click', function (e) {
+  e.stopPropagation();
+  handleStart();
+});
+
+document.addEventListener('keydown', handleKeyPressStart);
 
   function handleKeyPressStart(e) {
     if (e.key === 'Enter' || e.key === ' ') {
