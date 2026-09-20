@@ -240,6 +240,40 @@ function injectFacts() {
     initSnow();
     initGameFrames();
     initLockSystem();
+    initScrollArrows();
+  }
+
+  // ── SCROLL ARROWS ──
+  // Replaces the "SCROLL ..." text hints with a clickable arrow that snaps to the next section
+  function initScrollArrows() {
+    var indicators = document.querySelectorAll('.scroll-indicator');
+    indicators.forEach(function (el) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'scroll-arrow';
+      btn.setAttribute('aria-label', 'Go to next section');
+      btn.textContent = '▼';
+
+      el.textContent = '';
+      el.removeAttribute('aria-hidden');
+      el.appendChild(btn);
+
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var section = el.closest('.snap-section');
+        var next = section ? section.nextElementSibling : null;
+        while (next && !next.classList.contains('snap-section')) {
+          next = next.nextElementSibling;
+        }
+        if (next) next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        btn.blur();
+      });
+
+      // Keep Enter on the arrow from also triggering the potato fact reveal
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') e.stopPropagation();
+      });
+    });
   }
 
   // ── SNOW ──

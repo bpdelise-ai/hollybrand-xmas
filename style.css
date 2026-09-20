@@ -389,6 +389,7 @@ body::after {
 }
 .scroll-indicator {
   position: absolute;
+  z-index: 10;
   bottom: 1.5rem;
   left: 50%;
   transform: translateX(-50%);
@@ -397,6 +398,37 @@ body::after {
   letter-spacing: .14em;
   animation: bounce-down 1.6s ease-in-out infinite;
 }
+
+/* Clickable down arrow inside .scroll-indicator */
+.scroll-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  font-family: var(--font);
+  font-size: 22px;
+  line-height: 1;
+  color: var(--neon-green);
+  background: rgba(7, 8, 15, .6);
+  border: 2px solid var(--neon-green);
+  border-radius: 2px;
+  text-shadow: 0 0 8px var(--neon-green);
+  box-shadow: 0 0 10px rgba(0, 255, 136, .35);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .2s ease, box-shadow .2s ease, color .2s ease;
+}
+.scroll-arrow:hover,
+.scroll-arrow:focus-visible {
+  color: var(--black);
+  background: var(--neon-green);
+  text-shadow: none;
+  box-shadow: 0 0 18px var(--neon-green);
+  outline: none;
+}
+.scroll-indicator:hover { animation-play-state: paused; }
 
 /* ═══════════════════════════════════════
    SECTION LABELS & QUIPS
@@ -710,7 +742,7 @@ body::after {
   .superpower-list li { font-size: .5rem; }
   #startButton  { font-size: .85rem; padding: 1.4rem 3rem; }
   .game-hint    { font-size: .5rem; }
-  .scroll-indicator { font-size: .55rem; }
+  .scroll-arrow { width: 72px; height: 72px; font-size: 28px; }
 }
 
 /* ═══════════════════════════════════════
