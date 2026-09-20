@@ -6,7 +6,7 @@
   'use strict';
 
   // Core variables declared in scope
-var startScreen, startButton, experience, introMusic, worldSound, secretSound, codeEntrySfx, potatoFactSfx;
+var startScreen, startButton, experience, introMusic, worldSound, secretSound, potatoFactSfx, codeEntrySfx;
 
   // ── POTATO FACTS ──
   var facts = {
@@ -196,13 +196,10 @@ function injectFacts() {
     }
 
     // Bind start screen inputs safely
- // Bind start screen inputs safely
-startButton.addEventListener('click', function (e) {
-  e.stopPropagation();
-  handleStart();
-});
-
-document.addEventListener('keydown', handleKeyPressStart);
+    startButton.addEventListener('click', handleStart);
+    startScreen.addEventListener('click', handleStart);
+    document.addEventListener('keydown', handleKeyPressStart);
+  }
 
   function handleKeyPressStart(e) {
     if (e.key === 'Enter' || e.key === ' ') {
