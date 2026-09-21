@@ -197,7 +197,8 @@ body::after {
 ═══════════════════════════════════════ */
 #snap-container {
   height: 100vh;
-  overflow-y: scroll;
+  overflow-y: hidden; /* no manual scrolling: the arrow buttons are the only way forward */
+  overscroll-behavior: none;
   scroll-snap-type: y mandatory;
   -webkit-overflow-scrolling: touch;
 }

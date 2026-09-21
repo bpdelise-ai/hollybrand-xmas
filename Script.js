@@ -244,8 +244,55 @@ function injectFacts() {
   }
 
   // ── SCROLL ARROWS ──
-  // Replaces the "SCROLL ..." text hints with a clickable arrow that snaps to the next section
+  // Manual scrolling is disabled (see #snap-container in style.css).
+  // The only way forward is the arrow button, which plays a sound and snaps to the next section.
+  var currentSection = null;
+  var arrowScrolling = false;
+  var arrowScrollTimer = null;
+
   function initScrollArrows() {
+    var container = document.getElementById('snap-container');
+    if (!container) return;
+
+    // Arrow click sounds play in order and loop back to the first
+    var arrowSfxFiles = [
+      'assets/Audio/sm64_mario_here_we_go.wav',
+      'assets/Audio/sm64_mario_yippee.wav',
+      'assets/Audio/sm64_mario_whoa.wav',
+      'assets/Audio/sm64_mario_waha.wav'
+    ];
+    var arrowSfx = arrowSfxFiles.map(function (src) {
+      var a = new Audio(src);
+      a.preload = 'auto';
+      return a;
+    });
+    var arrowSfxIndex = 0;
+
+    currentSection = container.querySelector('.snap-section');
+
+    function goTo(section) {
+      currentSection = section;
+      arrowScrolling = true;
+      clearTimeout(arrowScrollTimer);
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      arrowScrollTimer = setTimeout(function () { arrowScrolling = false; }, 1200);
+    }
+
+    function realign() {
+      if (!currentSection || arrowScrolling) return;
+      var off = currentSection.getBoundingClientRect().top - container.getBoundingClientRect().top;
+      if (Math.abs(off) > 2) {
+        currentSection.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
+    }
+
+    // Undo any scroll that slips through (e.g. Tab focusing something off screen)
+    container.addEventListener('scroll', realign, { passive: true });
+    // Keep the current section aligned if the window size changes (fullscreen, rotate, etc.)
+    window.addEventListener('resize', function () {
+      if (currentSection) currentSection.scrollIntoView({ behavior: 'instant', block: 'start' });
+    });
+
     var indicators = document.querySelectorAll('.scroll-indicator');
     indicators.forEach(function (el) {
       var btn = document.createElement('button');
@@ -265,7 +312,15 @@ function injectFacts() {
         while (next && !next.classList.contains('snap-section')) {
           next = next.nextElementSibling;
         }
-        if (next) next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!next) return;
+
+        // Never step into a section whose code has not been entered yet
+        var num = parseInt(next.getAttribute('data-section'));
+        if (num && !unlockedSections[num] && next.querySelector('[data-silent-lock]')) return;
+
+        playSound(arrowSfx[arrowSfxIndex]);
+        arrowSfxIndex = (arrowSfxIndex + 1) % arrowSfx.length;
+        goTo(next);
         btn.blur();
       });
 
